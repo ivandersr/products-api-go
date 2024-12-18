@@ -1,0 +1,32 @@
+POST http://localhost:8000/products 
+Content-Type: application/json
+
+{
+    "name": "My Product 3",
+    "price": 1002
+}
+
+###
+GET http://localhost:8000/products/549a1e5c-4a15-42cf-a209-505e931efe16 
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1NDc4MDAsImlhdCI6MTczNDU0NzUwMCwic3ViIjoiMWM4OTUzMmQtMGY4OS00ZmZiLTgyNDMtNmY1OGNhYzFjYzBmIn0.t9m4G7be465x0v__ebC8UaD92O0KmcR1JNEMESVEkMA
+
+###
+PUT http://localhost:8000/products/549a1e5c-4a15-42cf-a209-505e931efe16
+Content-Type: application/json
+
+{
+    "price": 60.0
+}
+
+###
+DELETE http://localhost:8000/products/549a1e5c-4a15-42cf-a209-505e931efe16
+
+###
+GET http://localhost:8000/products?
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1NDc4MDAsImlhdCI6MTczNDU0NzUwMCwic3ViIjoiMWM4OTUzMmQtMGY4OS00ZmZiLTgyNDMtNmY1OGNhYzFjYzBmIn0.t9m4G7be465x0v__ebC8UaD92O0KmcR1JNEMESVEkMA
+
+### 
+GET http://localhost:8000/products?page=2&limit=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1NDc4MDAsImlhdCI6MTczNDU0NzUwMCwic3ViIjoiMWM4OTUzMmQtMGY4OS00ZmZiLTgyNDMtNmY1OGNhYzFjYzBmIn0.t9m4G7be465x0v__ebC8UaD92O0KmcR1JNEMESVEkMA
+

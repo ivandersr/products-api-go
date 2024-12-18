@@ -17,7 +17,7 @@ func TestCreateProduct(t *testing.T) {
 	}
 	db.AutoMigrate(&entity.Product{})
 	product, _ := entity.NewProduct("Product 01", 80)
-	productDB := NewProduct(db)
+	productDB := NewProductDB(db)
 
 	err = productDB.Create(product)
 	assert.Nil(t, err)
@@ -27,7 +27,7 @@ func TestCreateProduct(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, product.ID, productFound.ID)
 	assert.Equal(t, "Product 01", productFound.Name)
-	assert.Equal(t, 80, productFound.Price)
+	assert.Equal(t, 80.0, productFound.Price)
 	assert.NotNil(t, product.CreatedAt)
 }
 
@@ -38,7 +38,7 @@ func TestFindProductByID(t *testing.T) {
 	}
 	db.AutoMigrate(&entity.Product{})
 	product, _ := entity.NewProduct("Product 01", 80)
-	productDB := NewProduct(db)
+	productDB := NewProductDB(db)
 
 	db.Create(product)
 
@@ -56,14 +56,14 @@ func TestFindAllProducts(t *testing.T) {
 	db.AutoMigrate(&entity.Product{})
 	var products []entity.Product
 	for i := 1; i <= 10; i++ {
-		product, _ := entity.NewProduct(fmt.Sprintf("Product %d", i), i*10)
+		product, _ := entity.NewProduct(fmt.Sprintf("Product %d", i), float64(i*10.0))
 		products = append(products, *product)
 	}
 	db.Create(products)
-	productDB := NewProduct(db)
-	foundProducts, err := productDB.FindAll(0, 0, "")
+	productDB := NewProductDB(db)
+	response, err := productDB.FindAll(0, 0, "")
 	assert.Nil(t, err)
-	assert.Len(t, foundProducts, len(products))
+	assert.Len(t, response.Data, len(products))
 }
 
 func TestFindAllProductsWithPagination(t *testing.T) {
@@ -73,16 +73,18 @@ func TestFindAllProductsWithPagination(t *testing.T) {
 	}
 	db.AutoMigrate(&entity.Product{})
 	for i := 1; i <= 10; i++ {
-		product, err := entity.NewProduct(fmt.Sprintf("Product %d", i), i*10)
+		product, err := entity.NewProduct(fmt.Sprintf("Product %d", i), float64(i*10.0))
 		assert.NoError(t, err)
 		db.Create(product)
 	}
-	productDB := NewProduct(db)
-	foundProducts, err := productDB.FindAll(2, 4, "")
+	productDB := NewProductDB(db)
+	response, err := productDB.FindAll(2, 4, "")
 	assert.Nil(t, err)
-	assert.Len(t, foundProducts, 4)
-	assert.Equal(t, "Product 5", foundProducts[0].Name)
-	assert.Equal(t, "Product 8", foundProducts[3].Name)
+	assert.Len(t, response.Data, 4)
+	assert.Equal(t, "Product 5", response.Data[0].Name)
+	assert.Equal(t, "Product 8", response.Data[3].Name)
+	assert.Equal(t, 2, response.Page)
+	assert.Equal(t, 4, response.Limit)
 }
 
 func TestUpdateProdcut(t *testing.T) {
@@ -92,18 +94,18 @@ func TestUpdateProdcut(t *testing.T) {
 	}
 	db.AutoMigrate(&entity.Product{})
 	product, _ := entity.NewProduct("Product 01", 80)
-	productDB := NewProduct(db)
+	productDB := NewProductDB(db)
 
 	db.Create(product)
 	product.Name = "Updated Product 01"
-	product.Price = 100
+	product.Price = 100.0
 	var foundProduct entity.Product
 	err = productDB.Update(product)
 	assert.Nil(t, err)
 	err = db.First(&foundProduct, "id = ?", product.ID).Error
 	assert.Nil(t, err)
 	assert.Equal(t, "Updated Product 01", foundProduct.Name)
-	assert.Equal(t, 100, foundProduct.Price)
+	assert.Equal(t, 100.0, foundProduct.Price)
 }
 
 func TestDeleteProduct(t *testing.T) {
@@ -113,7 +115,7 @@ func TestDeleteProduct(t *testing.T) {
 	}
 	db.AutoMigrate(&entity.Product{})
 	product, _ := entity.NewProduct("Product 01", 80)
-	productDB := NewProduct(db)
+	productDB := NewProductDB(db)
 
 	db.Create(product)
 

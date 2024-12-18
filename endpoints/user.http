@@ -1,0 +1,17 @@
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+    "name": "Test user",
+    "email": "test@user.com",
+    "password": "a1b2c3"
+}
+
+###
+POST http://localhost:8000/users/token
+Content-Type: application/json
+
+{
+    "email": "test@user.com",
+    "password": "a1b2c3"
+}
